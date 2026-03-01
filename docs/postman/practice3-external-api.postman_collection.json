@@ -1,0 +1,84 @@
+﻿{
+  "info": {
+    "name": "Practice 3 - External APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "OpenWeather - Moscow",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://api.openweathermap.org/data/2.5/weather?q=Moscow&appid={{openWeatherApiKey}}&units=metric&lang=ru",
+          "protocol": "https",
+          "host": ["api", "openweathermap", "org"],
+          "path": ["data", "2.5", "weather"],
+          "query": [
+            { "key": "q", "value": "Moscow" },
+            { "key": "appid", "value": "{{openWeatherApiKey}}" },
+            { "key": "units", "value": "metric" },
+            { "key": "lang", "value": "ru" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "OpenWeather - Saint Petersburg",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://api.openweathermap.org/data/2.5/weather?q=Saint%20Petersburg&appid={{openWeatherApiKey}}&units=metric&lang=ru",
+          "protocol": "https",
+          "host": ["api", "openweathermap", "org"],
+          "path": ["data", "2.5", "weather"],
+          "query": [
+            { "key": "q", "value": "Saint Petersburg" },
+            { "key": "appid", "value": "{{openWeatherApiKey}}" },
+            { "key": "units", "value": "metric" },
+            { "key": "lang", "value": "ru" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ExchangeRate API - USD",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://v6.exchangerate-api.com/v6/{{exchangeRateApiKey}}/latest/USD",
+          "protocol": "https",
+          "host": ["v6", "exchangerate-api", "com"],
+          "path": ["v6", "{{exchangeRateApiKey}}", "latest", "USD"]
+        }
+      }
+    },
+    {
+      "name": "ExchangeRate API - EUR",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://v6.exchangerate-api.com/v6/{{exchangeRateApiKey}}/latest/EUR",
+          "protocol": "https",
+          "host": ["v6", "exchangerate-api", "com"],
+          "path": ["v6", "{{exchangeRateApiKey}}", "latest", "EUR"]
+        }
+      }
+    },
+    {
+      "name": "ExchangeRate API - RUB",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://v6.exchangerate-api.com/v6/{{exchangeRateApiKey}}/latest/RUB",
+          "protocol": "https",
+          "host": ["v6", "exchangerate-api", "com"],
+          "path": ["v6", "{{exchangeRateApiKey}}", "latest", "RUB"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "openWeatherApiKey", "value": "paste-openweather-key" },
+    { "key": "exchangeRateApiKey", "value": "paste-exchangerate-key" }
+  ]
+}

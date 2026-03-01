@@ -1,0 +1,16 @@
+﻿# Node
+node_modules/
+
+# Build
+frontend/dist/
+
+# Logs
+npm-debug.log*
+
+# Local extraction artifacts
+.tmp_pdf_text/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
