@@ -1,145 +1,209 @@
-﻿# Front_1KR - Практики 2-6 (Frontend + Backend)
+# Front_1KR - Практики 7-12
 
-Репозиторий реализует последовательность практических работ №2-№6 в одном проекте:
-- backend: Express API (CRUD), CORS, Swagger
-- frontend: React клиент интернет-магазина
-- docs: коллекции Postman и шаблон отчета для практики 3
+Проект объединяет практические занятия `№7-№12` по дисциплине "Фронтенд и бэкенд разработка" в одном приложении:
 
-## Связь практик между собой
-
-Практики **иерархически связаны** и выполнены как единый проект:
-1. Практика 2: базовый CRUD API
-2. Практика 3: тестирование API и внешние API через Postman
-3. Практика 4: интеграция API + React (интернет-магазин)
-4. Практика 5: документация API через Swagger (OpenAPI)
-5. Практика 6: финальная проверка и оформление README
+- `backend` - Express API с авторизацией, JWT, refresh cookie, RBAC и Swagger
+- `frontend` - React-интерфейс для входа, проверки сессий, ролей и работы с каталогом товаров
+- `docs` - ранее подготовленные материалы по прошлым практикам
 
 ## Что реализовано
 
-### Практика 2 (Node.js + Express)
-- CRUD API для товаров: `GET/POST/PATCH/DELETE /api/products`
-- Поля товара: `id`, `name`, `category`, `description`, `price`, `stock`, опционально `rating`, `imageUrl`
-- Валидация входных данных
+### Практика 7. Базовая аутентификация
 
-### Практика 3 (JSON + внешние API + Postman)
-- Подготовлены коллекции Postman:
-  - `docs/postman/practice3-local-api.postman_collection.json`
-  - `docs/postman/practice3-external-api.postman_collection.json`
-- Добавлен шаблон отчета:
-  - `docs/PRACTICE_3_REPORT.md`
-- Часть со скриншотами выполняется вручную в GUI Postman (инструкция есть)
+- регистрация пользователя: `POST /api/auth/register`
+- вход: `POST /api/auth/login`
+- пароль хранится только в виде `bcrypt hash`
+- сущность пользователя приведена к требованиям практики:
+  - `id`
+  - `email`
+  - `first_name`
+  - `last_name`
+  - `password` -> хранится как `passwordHash`
 
-### Практика 4 (API + React)
-- React-клиент, связанный с backend через `axios`
-- CRUD-операции с товарами через интерфейс
-- Каталог из 10+ товаров на старте
-- Поиск по товарам
-- CORS-настройка на сервере для фронтенда
+### Практика 8. JWT и защищенные маршруты
 
-### Практика 5 (Swagger)
-- Подключены `swagger-jsdoc` + `swagger-ui-express`
-- Документация доступна на `http://localhost:3000/api-docs`
-- Описаны схемы и CRUD-эндпоинты
+- при логине сервер выдает `access token`
+- реализован маршрут `GET /api/auth/me`
+- защищен маршрут `GET /api/products/:id`
+- также защищены операции изменения товаров
 
-### Практика 6 (подготовка к КР)
-- Проверка запуска backend/frontend
-- Подготовлен полноценный README
-- Добавлены материалы, необходимые для сдачи
+### Практика 9. Cookie и кэширование
 
-## Структура проекта
+- `refresh token` хранится в `HttpOnly cookie`
+- cookie настраивается с `SameSite=lax`
+- в production предусмотрен `secure`
+- `access token` хранится только в памяти клиента, не в `localStorage`
 
-```txt
-Front_1KR/
-  backend/
-    app.js
-    package.json
-  frontend/
-    src/
-      App.jsx
-      App.css
-      api.js
-    package.json
-  docs/
-    PRACTICE_3_REPORT.md
-    postman/
-      practice3-local-api.postman_collection.json
-      practice3-external-api.postman_collection.json
-      screenshots/
-```
+### Практика 10. Refresh token и сессии
 
-## Быстрый старт
+- реализован маршрут `POST /api/auth/refresh`
+- refresh token ротируется при обновлении
+- есть список пользовательских сессий: `GET /api/auth/sessions`
+- есть завершение текущей сессии: `POST /api/auth/logout`
+- есть завершение всех сессий: `POST /api/auth/logout-all`
 
-### 1) Backend
+### Практика 11. RBAC и blacklist
+
+- роли: `user`, `moderator`, `admin`
+- права:
+  - `user` может входить и читать свои защищенные данные
+  - `moderator` может создавать и редактировать товары
+  - `admin` может делать все, включая удаление товаров и просмотр admin-статистики
+- реализован blacklist для access token: `POST /api/auth/blacklist`
+- при logout access token помечается отозванным
+- отозванные/скомпрометированные сессии блокируются
+
+### Практика 12. Подготовка к защите
+
+- единый интерфейс для демонстрации всех сценариев
+- Swagger доступен по адресу `http://localhost:3000/api-docs`
+- README описывает запуск, проверку, ограничения и ручные действия перед сдачей
+
+## Демо-аккаунты
+
+Используй эти аккаунты для показа ролей преподавателю:
+
+- `admin@1kr.local / Admin123!`
+- `moderator@1kr.local / Moderator123!`
+- `user@1kr.local / User12345!`
+
+## API
+
+### Auth
+
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/refresh`
+- `GET /api/auth/me`
+- `GET /api/auth/sessions`
+- `POST /api/auth/logout`
+- `POST /api/auth/logout-all`
+- `POST /api/auth/blacklist` - только `admin`
+
+### Products
+
+- `GET /api/products` - публичный каталог
+- `GET /api/products/:id` - только после авторизации
+- `POST /api/products` - `admin`, `moderator`
+- `PUT /api/products/:id` - `admin`, `moderator`
+- `PATCH /api/products/:id` - `admin`, `moderator`
+- `DELETE /api/products/:id` - только `admin`
+
+### Role-based маршруты
+
+- `GET /api/admin/overview` - только `admin`
+- `GET /api/moderation/overview` - `admin`, `moderator`
+
+## Интерфейс frontend
+
+Во frontend реализовано:
+
+- форма входа/регистрации
+- отображение текущего пользователя и роли
+- просмотр access token, который хранится только в памяти
+- просмотр списка сессий
+- logout текущей сессии и logout всех сессий
+- admin-панель blacklist
+- каталог товаров
+- создание/редактирование/удаление товаров по ролям
+- проверка защищенного `GET /api/products/:id`
+
+## Как запустить
+
+### Установка
 
 ```bash
-cd backend
 npm install
-npm run start
 ```
 
-Backend URL: `http://localhost:3000`
-Swagger URL: `http://localhost:3000/api-docs`
-
-### 2) Frontend
+### Запуск всего проекта
 
 ```bash
-cd frontend
-npm install
 npm run dev
 ```
 
-Frontend URL: `http://localhost:3001`
+После запуска:
 
-## API (основные маршруты)
+- backend: `http://localhost:3000`
+- Swagger: `http://localhost:3000/api-docs`
+- frontend: `http://localhost:3001`
 
-### Products
-- `GET /api/products` - список товаров
-- `GET /api/products/:id` - товар по id
-- `POST /api/products` - создать товар
-- `PATCH /api/products/:id` - обновить товар
-- `DELETE /api/products/:id` - удалить товар
+### Отдельный запуск backend
 
-### Users (дополнительно, из учебного примера практик)
-- `GET /api/users`
-- `GET /api/users/:id`
-- `POST /api/users`
-- `PATCH /api/users/:id`
-- `DELETE /api/users/:id`
+```bash
+cd backend
+npm run start
+```
 
-## Мини-теория для защиты
+### Отдельный запуск frontend
 
-### Основные термины
-- **Node.js**: среда выполнения JavaScript на сервере.
-- **Express.js**: фреймворк для серверных HTTP-приложений на Node.js.
-- **REST API**: стиль API, где ресурсы доступны по URL и HTTP-методам.
-- **CRUD**: Create, Read, Update, Delete.
-- **JSON**: формат обмена данными `ключ: значение`.
-- **Middleware**: промежуточная функция обработки запроса/ответа в Express.
-- **CORS**: политика браузера для междоменных запросов, на сервере задаются разрешенные origins/методы/заголовки.
-- **Swagger/OpenAPI**: стандарт и инструменты документирования REST API.
-- **JSDoc-аннотации**: комментарии в коде, из которых генерируется OpenAPI спецификация.
-- **HTTP-коды**:
-  - `200` OK
-  - `201` Created
-  - `204` No Content
-  - `400` Bad Request
-  - `404` Not Found
-  - `500` Internal Server Error
+```bash
+cd frontend
+npm run dev
+```
 
-### Логика клиент-серверного взаимодействия
-1. Frontend отправляет HTTP-запрос на backend.
-2. Backend валидирует данные.
-3. Выполняется CRUD-операция.
-4. Backend возвращает JSON и статус-код.
-5. Frontend обновляет состояние интерфейса.
+## Что было проверено
 
-### Почему нужен Swagger
-- Быстро проверить API в браузере через `Try it out`.
-- Документация актуальна, так как близка к коду.
-- Упрощает работу тестировщикам и другим разработчикам.
+Локально проверены следующие сценарии:
+
+- логин под `admin`
+- получение `GET /api/auth/me`
+- получение `GET /api/auth/sessions`
+- публичный `GET /api/products`
+- защищенный `GET /api/products/:id`
+- создание товара под `admin`
+- обновление access token через `POST /api/auth/refresh`
+- удаление товара под `admin`
+- запрет на создание товара под `user` (`403`)
+- запрет на `GET /api/admin/overview` под `moderator` (`403`)
+- сборка frontend: `npm run build`
+- линт frontend: `npm run lint`
+- синтаксическая проверка backend: `node --check app.js`
 
 ## Что нужно сделать вручную перед сдачей
 
-1. Выполнить Postman-запросы и добавить скриншоты в `docs/postman/screenshots`.
-2. Загрузить репозиторий на GitHub и убедиться, что он публичный.
-3. Вставить ссылку на репозиторий в СДО согласно требованиям практики.
+Это уже с моей стороны не автоматизируется, поэтому сделай сам:
+
+1. Сделай скриншоты для отчета/защиты:
+   - frontend после входа под `admin`
+   - список сессий
+   - Swagger `/api-docs`
+   - пример `403` для пользователя без прав
+   - пример успешного refresh/logout
+2. Если преподаватель просит Postman, повтори в Postman сценарии:
+   - `login`
+   - `me`
+   - `refresh`
+   - `sessions`
+   - `blacklist`
+3. Загрузи проект в GitHub и вставь ссылку в СДО.
+
+## Известные ограничения и проблемы
+
+- все данные хранятся в памяти сервера:
+  - после перезапуска backend пропадут зарегистрированные пользователи
+  - сбросятся сессии
+  - очистится blacklist
+  - вернется исходный список товаров
+- `HttpOnly cookie` в dev работает без `secure`, потому что проект запускается по `http://localhost`
+- для production нужно вынести JWT secrets в `.env` и включить HTTPS
+- файлы `№9-№12` из методички содержали только тему занятия и ссылку на рабочую тетрадь в СДО, поэтому реализация выполнена как логичное полное продолжение практик `№7-№8`:
+  - cookie
+  - refresh token
+  - сессии
+  - RBAC
+  - blacklist
+
+## Что показать преподавателю
+
+Быстрый сценарий демонстрации:
+
+1. Открой frontend и Swagger.
+2. Войди под `user` и покажи, что создание товара запрещено.
+3. Войди под `moderator` и покажи создание/редактирование товара.
+4. Войди под `admin` и покажи:
+   - список сессий
+   - admin overview
+   - blacklist токена
+   - удаление товара
+5. Обнови страницу и покажи, что сессия восстанавливается через refresh cookie.
