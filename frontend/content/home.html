@@ -1,0 +1,62 @@
+<section class="home-layout">
+  <div class="stack">
+    <article class="form-card">
+      <h2>Быстрая заметка</h2>
+      <p>Этот блок закрывает базовое ТЗ практики 13: заметки сохраняются в <code>localStorage</code> и доступны офлайн.</p>
+      <form id="note-form">
+        <div class="field">
+          <label for="note-input">Текст заметки</label>
+          <input id="note-input" type="text" placeholder="Например: повторить Service Worker lifecycle" required />
+        </div>
+        <button class="primary" type="submit">Сохранить заметку</button>
+      </form>
+    </article>
+
+    <article class="form-card">
+      <h2>Напоминание</h2>
+      <p>Практика 17: заметка получает дату/время, а сервер планирует push-напоминание через <code>setTimeout</code>.</p>
+      <form id="reminder-form">
+        <div class="field">
+          <label for="reminder-text">Текст напоминания</label>
+          <input id="reminder-text" type="text" placeholder="Подготовить отчёт по PWA" required />
+        </div>
+        <div class="field">
+          <label for="reminder-time">Дата и время</label>
+          <input id="reminder-time" type="datetime-local" required />
+        </div>
+        <button class="primary" type="submit">Добавить с напоминанием</button>
+      </form>
+    </article>
+  </div>
+
+  <div class="stack">
+    <article class="panel">
+      <div class="notes-head">
+        <div>
+          <h2>Лента заметок</h2>
+          <p>Хранилище локальное, поэтому заметки сохраняются даже после перезагрузки страницы.</p>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi">
+            <span>Заметок</span>
+            <strong id="notes-count">0</strong>
+          </div>
+          <div class="kpi">
+            <span>App Shell</span>
+            <strong>ready</strong>
+          </div>
+          <div class="kpi">
+            <span>Offline</span>
+            <strong>local</strong>
+          </div>
+        </div>
+      </div>
+
+      <p class="small-note">
+        Откройте приложение во второй вкладке: при добавлении новой заметки там появится realtime-toast через Socket.IO, а при активной подписке придёт push-уведомление.
+      </p>
+
+      <ul class="note-list" id="notes-list"></ul>
+    </article>
+  </div>
+</section>

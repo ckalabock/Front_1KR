@@ -8,12 +8,9 @@
   ],
   "scripts": {
     "install:all": "npm install --workspaces",
-    "dev:backend": "npm run start --workspace backend",
-    "dev:frontend": "npm run dev --workspace frontend",
-    "build:frontend": "npm run build --workspace frontend",
-    "dev": "concurrently -n backend,frontend -c green,cyan \"npm run dev:backend\" \"npm run dev:frontend\""
+    "start": "npm run start --workspace backend",
+    "dev": "npm run dev --workspace backend",
+    "cert:windows": "npm run cert:windows --workspace backend"
   },
-  "devDependencies": {
-    "concurrently": "^9.2.1"
-  }
+  "devDependencies": {}
 }

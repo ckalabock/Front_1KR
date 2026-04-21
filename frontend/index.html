@@ -1,13 +1,76 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <meta name="theme-color" content="#ff6b35" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="description"
+      content="PWA-приложение заметок для практик 13-18: Service Worker, Web App Manifest, App Shell, WebSocket и Push."
+    />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/icons/icon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="stylesheet" href="/styles.css" />
+    <title>Pulse Notes</title>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Практики 13-18</p>
+          <h1>Pulse Notes</h1>
+          <p class="lead">
+            Офлайн-заметки, установка как PWA, мгновенный App Shell, WebSocket-уведомления и push-напоминания в одном приложении.
+          </p>
+        </div>
+
+        <div class="status-board">
+          <div class="status-card">
+            <span>Service Worker</span>
+            <strong id="sw-status">ожидание</strong>
+          </div>
+          <div class="status-card">
+            <span>Socket.IO</span>
+            <strong id="socket-status">не подключен</strong>
+          </div>
+          <div class="status-card">
+            <span>Push</span>
+            <strong id="push-status">не активирован</strong>
+          </div>
+        </div>
+      </header>
+
+      <nav class="tabs" aria-label="Навигация по приложению">
+        <button class="tab active" id="home-btn" type="button">Главная</button>
+        <button class="tab" id="about-btn" type="button">О приложении</button>
+      </nav>
+
+      <main id="app-content" class="content-host" aria-live="polite">
+        <section class="panel placeholder">
+          <p>Загрузка интерфейса...</p>
+        </section>
+      </main>
+
+      <footer class="footer-bar">
+        <div class="footer-copy">
+          <strong>Push и realtime</strong>
+          <p>Откройте приложение в двух вкладках, чтобы проверить WebSocket-уведомления и работу напоминаний.</p>
+        </div>
+
+        <div class="footer-actions">
+          <button class="ghost" id="enable-push" type="button">Включить уведомления</button>
+          <button class="ghost danger" id="disable-push" type="button" hidden>Отключить уведомления</button>
+        </div>
+      </footer>
+    </div>
+
+    <div class="toast-stack" id="toast-stack" aria-live="assertive" aria-atomic="true"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/app.js" defer></script>
   </body>
 </html>

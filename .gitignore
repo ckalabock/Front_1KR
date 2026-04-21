@@ -9,6 +9,7 @@ npm-debug.log*
 
 # Local extraction artifacts
 .tmp_pdf_text/
+backend/certs/
 
 # OS / editor
 .DS_Store
