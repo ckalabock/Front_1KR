@@ -10,7 +10,12 @@
     "install:all": "npm install --workspaces",
     "start": "npm run start --workspace backend",
     "dev": "npm run dev --workspace backend",
-    "cert:windows": "npm run cert:windows --workspace backend"
+    "dev:backend1": "npm run dev:backend1 --workspace backend",
+    "dev:backend2": "npm run dev:backend2 --workspace backend",
+    "dev:backend3": "npm run dev:backend3 --workspace backend",
+    "start:backend1": "npm run start:backend1 --workspace backend",
+    "start:backend2": "npm run start:backend2 --workspace backend",
+    "start:backend3": "npm run start:backend3 --workspace backend"
   },
   "devDependencies": {}
 }

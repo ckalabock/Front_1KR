@@ -2,8 +2,8 @@
   "name": "frontend",
   "private": true,
   "version": "1.0.0",
-  "description": "Static PWA client served by backend",
+  "description": "Static training UI for practices 19-24",
   "scripts": {
-    "info": "node -e \"console.log('Static files are served by the backend workspace.')\""
+    "info": "node -e \"console.log('Static files are served by the backend workspace under /app.')\""
   }
 }

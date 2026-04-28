@@ -3,74 +3,227 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#ff6b35" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta
       name="description"
-      content="PWA-приложение заметок для практик 13-18: Service Worker, Web App Manifest, App Shell, WebSocket и Push."
+      content="Учебный проект для практик 19-24: PostgreSQL, MongoDB, Redis, JWT/RBAC, Nginx, HAProxy и Docker."
     />
-    <link rel="manifest" href="/manifest.json" />
-    <link rel="icon" href="/icons/icon-32.png" sizes="32x32" type="image/png" />
-    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-    <link rel="stylesheet" href="/styles.css" />
-    <title>Pulse Notes</title>
+    <link rel="stylesheet" href="/app/styles.css" />
+    <title>Front_1KR Practices 19-24</title>
   </head>
   <body>
-    <div class="page-shell">
+    <div class="page">
       <header class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">Практики 13-18</p>
-          <h1>Pulse Notes</h1>
+        <div>
+          <p class="eyebrow">Практики 19-24</p>
+          <h1>Базы данных, кэш и балансировка</h1>
           <p class="lead">
-            Офлайн-заметки, установка как PWA, мгновенный App Shell, WebSocket-уведомления и push-напоминания в одном приложении.
+            Упрощённый интерфейс для проверки CRUD в PostgreSQL и MongoDB, RBAC с JWT и Redis,
+            а также ответа разных backend-инстансов через балансировщик.
           </p>
         </div>
-
-        <div class="status-board">
-          <div class="status-card">
-            <span>Service Worker</span>
-            <strong id="sw-status">ожидание</strong>
+        <div class="status-box">
+          <div class="status-item">
+            <span>Сервер</span>
+            <strong id="server-id">ожидание</strong>
           </div>
-          <div class="status-card">
-            <span>Socket.IO</span>
-            <strong id="socket-status">не подключен</strong>
+          <div class="status-item">
+            <span>PostgreSQL</span>
+            <strong id="postgres-status">не проверен</strong>
           </div>
-          <div class="status-card">
-            <span>Push</span>
-            <strong id="push-status">не активирован</strong>
+          <div class="status-item">
+            <span>MongoDB</span>
+            <strong id="mongo-status">не проверен</strong>
+          </div>
+          <div class="status-item">
+            <span>Redis</span>
+            <strong id="redis-status">не проверен</strong>
           </div>
         </div>
       </header>
 
-      <nav class="tabs" aria-label="Навигация по приложению">
-        <button class="tab active" id="home-btn" type="button">Главная</button>
-        <button class="tab" id="about-btn" type="button">О приложении</button>
-      </nav>
+      <main class="grid">
+        <section class="card">
+          <div class="section-head">
+            <div>
+              <h2>Практика 19. PostgreSQL</h2>
+              <p>CRUD для пользователей с хранением в реляционной базе данных.</p>
+            </div>
+            <button class="secondary" id="refresh-postgres" type="button">Обновить список</button>
+          </div>
 
-      <main id="app-content" class="content-host" aria-live="polite">
-        <section class="panel placeholder">
-          <p>Загрузка интерфейса...</p>
+          <form class="form-grid" id="postgres-create-form">
+            <input name="first_name" type="text" placeholder="Имя" required />
+            <input name="last_name" type="text" placeholder="Фамилия" required />
+            <input name="age" type="number" min="0" placeholder="Возраст" required />
+            <button type="submit">Создать</button>
+          </form>
+
+          <form class="form-grid slim" id="postgres-update-form">
+            <input name="id" type="number" min="1" placeholder="ID для обновления" required />
+            <input name="first_name" type="text" placeholder="Новое имя" required />
+            <input name="last_name" type="text" placeholder="Новая фамилия" required />
+            <input name="age" type="number" min="0" placeholder="Новый возраст" required />
+            <button type="submit">Обновить</button>
+          </form>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Имя</th>
+                  <th>Фамилия</th>
+                  <th>Возраст</th>
+                  <th>Действие</th>
+                </tr>
+              </thead>
+              <tbody id="postgres-users-body">
+                <tr>
+                  <td colspan="5">Данные пока не загружены.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <div>
+              <h2>Практика 20. MongoDB</h2>
+              <p>CRUD для пользователей с хранением в документной NoSQL базе.</p>
+            </div>
+            <button class="secondary" id="refresh-mongo" type="button">Обновить список</button>
+          </div>
+
+          <form class="form-grid" id="mongo-create-form">
+            <input name="first_name" type="text" placeholder="Имя" required />
+            <input name="last_name" type="text" placeholder="Фамилия" required />
+            <input name="age" type="number" min="0" placeholder="Возраст" required />
+            <button type="submit">Создать</button>
+          </form>
+
+          <form class="form-grid slim" id="mongo-update-form">
+            <input name="id" type="number" min="1" placeholder="ID для обновления" required />
+            <input name="first_name" type="text" placeholder="Новое имя" required />
+            <input name="last_name" type="text" placeholder="Новая фамилия" required />
+            <input name="age" type="number" min="0" placeholder="Новый возраст" required />
+            <button type="submit">Обновить</button>
+          </form>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Имя</th>
+                  <th>Фамилия</th>
+                  <th>Возраст</th>
+                  <th>Действие</th>
+                </tr>
+              </thead>
+              <tbody id="mongo-users-body">
+                <tr>
+                  <td colspan="5">Данные пока не загружены.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <div>
+              <h2>Практика 21. Redis + JWT + RBAC</h2>
+              <p>Вход в систему, чтение кэшируемых маршрутов и управление товарами.</p>
+            </div>
+            <button class="secondary" id="load-profile" type="button">Проверить профиль</button>
+          </div>
+
+          <form class="form-grid" id="login-form">
+            <input name="username" type="text" placeholder="Логин" value="admin" required />
+            <input name="password" type="password" placeholder="Пароль" value="admin123" required />
+            <button type="submit">Войти</button>
+          </form>
+
+          <div class="hint">
+            Тестовые аккаунты: <code>admin/admin123</code>, <code>manager/manager123</code>,
+            <code>user/user123</code>.
+          </div>
+
+          <div class="actions">
+            <button class="secondary" id="load-rbac-users" type="button">Получить пользователей</button>
+            <button class="secondary" id="load-products" type="button">Получить товары</button>
+            <button class="secondary" id="repeat-products" type="button">Повторить товары для кэша</button>
+          </div>
+
+          <form class="form-grid" id="product-form">
+            <input name="name" type="text" placeholder="Название товара" required />
+            <input name="price" type="number" min="0" step="0.01" placeholder="Цена" required />
+            <input name="description" type="text" placeholder="Описание" />
+            <button type="submit">Добавить товар</button>
+          </form>
+
+          <div class="output-block">
+            <h3>Текущий профиль</h3>
+            <pre id="profile-output">Пока не выполнен вход.</pre>
+          </div>
+          <div class="output-block">
+            <h3>Ответ маршрутов пользователей</h3>
+            <pre id="rbac-users-output">Нет данных.</pre>
+          </div>
+          <div class="output-block">
+            <h3>Ответ маршрутов товаров</h3>
+            <pre id="products-output">Нет данных.</pre>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <div>
+              <h2>Практики 22-23. Балансировка и Docker</h2>
+              <p>Проверка ответа backend-инстансов и журнал запросов к корневому маршруту.</p>
+            </div>
+            <button class="secondary" id="check-root" type="button">Проверить GET /</button>
+          </div>
+
+          <div class="actions">
+            <button class="secondary" id="check-root-5" type="button">Сделать 5 запросов</button>
+            <button class="secondary" id="reload-status" type="button">Обновить статус сервисов</button>
+          </div>
+
+          <div class="output-block">
+            <h3>Статус проекта</h3>
+            <pre id="status-output">Статус ещё не загружен.</pre>
+          </div>
+
+          <div class="output-block">
+            <h3>Журнал ответов балансировщика</h3>
+            <pre id="root-output">Ответы пока отсутствуют.</pre>
+          </div>
+
+          <div class="output-block">
+            <h3>Подсказка по проверке</h3>
+            <pre>curl http://localhost/
+curl http://localhost/
+curl http://localhost/
+
+Если Nginx или HAProxy настроены верно, поле server в ответе будет меняться между backend-инстансами.</pre>
+          </div>
         </section>
       </main>
 
-      <footer class="footer-bar">
-        <div class="footer-copy">
-          <strong>Push и realtime</strong>
-          <p>Откройте приложение в двух вкладках, чтобы проверить WebSocket-уведомления и работу напоминаний.</p>
+      <div class="log-card">
+        <div class="section-head">
+          <div>
+            <h2>Журнал интерфейса</h2>
+            <p>Краткие ответы сервера и ошибки, чтобы быстрее проверять практику.</p>
+          </div>
+          <button class="secondary" id="clear-log" type="button">Очистить</button>
         </div>
-
-        <div class="footer-actions">
-          <button class="ghost" id="enable-push" type="button">Включить уведомления</button>
-          <button class="ghost danger" id="disable-push" type="button" hidden>Отключить уведомления</button>
-        </div>
-      </footer>
+        <pre id="app-log">Интерфейс загружен.</pre>
+      </div>
     </div>
 
-    <div class="toast-stack" id="toast-stack" aria-live="assertive" aria-atomic="true"></div>
-
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/app.js" defer></script>
+    <script src="/app/app.js" defer></script>
   </body>
 </html>

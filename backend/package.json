@@ -1,21 +1,30 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "Express + Socket.IO + Web Push backend for practices 13-18",
+  "description": "Express backend for practices 19-24: PostgreSQL, MongoDB, Redis, JWT/RBAC and load balancing",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "node --watch app.js",
-    "cert:windows": "powershell -ExecutionPolicy Bypass -File .\\scripts\\create-dev-cert.ps1"
+    "start:backend1": "node scripts/start-instance.js backend-1 3001",
+    "start:backend2": "node scripts/start-instance.js backend-2 3002",
+    "start:backend3": "node scripts/start-instance.js backend-3 3003",
+    "dev:backend1": "node --watch scripts/start-instance.js backend-1 3001",
+    "dev:backend2": "node --watch scripts/start-instance.js backend-2 3002",
+    "dev:backend3": "node --watch scripts/start-instance.js backend-3 3003"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
-    "socket.io": "^4.8.3",
-    "web-push": "^3.6.7"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.3",
+    "pg": "^8.16.3",
+    "redis": "^5.8.2",
+    "sequelize": "^6.37.7"
   }
 }
